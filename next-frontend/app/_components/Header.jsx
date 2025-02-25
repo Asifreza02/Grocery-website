@@ -67,7 +67,7 @@ const Header = () => {
             {categoryList.map((category, index) => (
               <Link key={index} href={'product-category/' + category.attributes.name}>
                 <DropdownMenuItem className="cursor-pointer">
-                  <img src={process.env.NEXT_PUBLIC_BAKEND_BASE_URL +
+                  <img src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
                     category.attributes?.icon?.data?.attributes?.url} className='w-8 h-8 object-fit' />
                   <h2>{category.attributes?.name}</h2>
                 </DropdownMenuItem>

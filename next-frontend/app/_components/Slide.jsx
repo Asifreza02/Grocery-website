@@ -31,7 +31,7 @@ const Slide = () => {
     <CarouselContent>
       {sliderList.map((slider, index)=>(
         <CarouselItem key={index} >
-          <img src={process.env.NEXT_PUBLIC_BAKEND_BASE_URL+
+          <img src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+
             slider.attributes?.image?.data[0]?.attributes?.url} alt={slider.name}
             className=' p-8 w-screen h-[200px] md:h-[400px] object-cover'
               />

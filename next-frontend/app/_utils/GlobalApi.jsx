@@ -69,7 +69,7 @@ export const handleAddToCart = async (data)=>{
   try{
       const res = await axiosClient.post("/user-carts", data,{
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_BAKEND_TOKEN}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_BACKEND_TOKEN}`,
           'Content-Type': 'application/json' 
         }
       })
