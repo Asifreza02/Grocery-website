@@ -1,13 +1,14 @@
+
 "use client"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { getLoginAccount } from '@/app/_utils/GlobalApi'
+import { loginUser } from '../../_services/auth'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
-const singIn = () => {
+const SignIn = () => {
 
 
   const [email, setEmail] = useState();
@@ -16,30 +17,21 @@ const singIn = () => {
 
 
     useEffect (()=>{
-      const jwt = sessionStorage.getItem('jwt');
-      if (jwt) {
+      const token = localStorage.getItem('token');
+      if (token) {
         toast('Already signed in')
         router.push('/')
       }
     },[])
 
-  const onLoginAccount = async (account) => {
+  const onLoginAccount = async () => {
     try {
-      const userData = await getLoginAccount(email, password);
-
-
-      if (!userData) {
-        console.log("no user data");
-        return;
-      }
-
-      sessionStorage.setItem('user', JSON.stringify(userData.user));
-      sessionStorage.setItem('jwt', userData.jwt);
-      toast("Account login Successfully...")
+      await loginUser(email, password);
+      toast.success("Login successful!")
       router.push('/')
     }
     catch (err) {
-      toast(err?.response?.data?.error?.message);
+      toast.error("Invalid email or password");
     }
   }
 
@@ -68,4 +60,4 @@ const singIn = () => {
   )
 }
 
-export default singIn
+export default SignIn

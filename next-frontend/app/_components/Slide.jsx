@@ -16,7 +16,7 @@ const Slide = () => {
   const getSliderList = async () =>{
       try {
           const res = await getSlider();
-          setSliderList(res.data);
+          setSliderList(res);
         } catch (error) {
           console.error("Error fetching categories:", error);
           
@@ -25,27 +25,25 @@ const Slide = () => {
     useEffect(() => {
       getSliderList(); 
     }, []);
-
-  return (
-    <Carousel>
-    <CarouselContent>
-      {sliderList.map((slider, index)=>(
-        <CarouselItem key={index} >
-          <img src={process.env.NEXT_PUBLIC_BACKEND_BASE_URL+
-            slider.attributes?.image?.data[0]?.attributes?.url} alt={slider.name}
-            className=' p-8 w-screen h-[200px] md:h-[400px] object-cover'
-              />
+    return (
+        <Carousel>
+        <CarouselContent>
+          {sliderList.map((slider, index)=>( // Changed from res.data to res
+            <CarouselItem key={index} >
+              <img src={slider.image} alt={slider.name} // Changed from a deeply nested structure to a direct property
+                className=' p-8 w-screen h-[200px] md:h-[400px] object-cover'
+                  />
+              
+            </CarouselItem>
+            
+          ))}
           
-        </CarouselItem>
-        
-      ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
       
-    </CarouselContent>
-    <CarouselPrevious />
-    <CarouselNext />
-  </Carousel>
-  
-  )
-}
-
-export default Slide
+      )
+    }
+    
+    export default Slide

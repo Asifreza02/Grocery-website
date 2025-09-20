@@ -1,13 +1,14 @@
+
 "use client"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { getCreateAccount } from '@/app/_utils/GlobalApi'
+import { registerUser } from '../../_services/auth'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
-const createAccount = () => {
+const CreateAccount = () => {
 
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
@@ -15,32 +16,23 @@ const createAccount = () => {
   const router = useRouter()
 
   useEffect (()=>{
-    const jwt = sessionStorage.getItem('jwt');
-    if (jwt) {
+    const token = localStorage.getItem('token');
+    if (token) {
       router.push('/')
     }
   },[])
 
 const onCreateAccount = async () => {
   if (!username || !email || !password) {
-    console.error("Missing required fields");
+    toast.error("Missing required fields");
     return;
   }
   try {
-    const userData = await getCreateAccount(username, email, password);
-
-    if (!userData) {
-      console.log("no user data");
-      return;
-    }
-      sessionStorage.setItem('user', JSON.stringify(userData.user));
-      sessionStorage.setItem('jwt', userData.jwt);
-      toast("Account has been created.")
-      router.push('/')
-        
+    await registerUser(username, email, password);
+    toast.success("Account has been created.")
+    router.push('/')
   } catch (error) {
-    toast('Error creating account');
-    console.error("Error in onCreateAccount:", error);
+    toast.error('Error creating account');
   }
 };
 
@@ -49,7 +41,7 @@ const onCreateAccount = async () => {
     <div className='flex justify-center items-baseline my-20 '>
       <div className='flex flex-col justify-center items-center bg-emerald-900 p-10 gap-2 rounded-md'>
         <img src="/grocery-store-logo.jpg" alt="" className='w-24 h-24' />
-        <h2 className='font-bold text-2xl'>Create an Acoount</h2>
+        <h2 className='font-bold text-2xl'>Create an Account</h2>
         <div className='flex flex-col gap-4  w-full mt-6'>
           <Input placeholder='Username'
           onChange={(e)=>setUsername(e.target.value)}
@@ -73,4 +65,4 @@ const onCreateAccount = async () => {
   )
 }
 
-export default createAccount
+export default CreateAccount

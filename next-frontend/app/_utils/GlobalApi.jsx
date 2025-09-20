@@ -1,30 +1,32 @@
 
-const { default: axios } = require("axios");
+import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:1337/api',
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL || 'http://localhost:5000', 
   headers: { "Content-Type": "application/json" },
   timeout: 10000,
 });
 
 export const getCategory = async () => {
-  const res = await axiosClient.get('/categories?populate=*');
+  const res = await axiosClient.get('/api/categories');
   return res.data;
 };
 
 export const getSlider = async () => {
-  const res = await axiosClient.get('/sliders?populate=*');
+  // Assuming you have a slider endpoint in your new backend
+  // If not, you might need to remove this or adapt it
+  const res = await axiosClient.get('/api/sliders');
   return res.data;
 };
 
 export const getProducts = async () => {
-  const res = await axiosClient.get('/products?populate=*');
+  const res = await axiosClient.get('/api/products');
   return res.data;
 };
 
 export const getProductsByCategory = async (category) => {
   try {
-    const res = await axiosClient.get(`/products?filters[categories][name][$in]=${category}&populate=*`);
+    const res = await axiosClient.get(`/api/products?category=${category}`);
     return res.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -32,51 +34,42 @@ export const getProductsByCategory = async (category) => {
   }
 };
 
-export const getCreateAccount = async (username, email, password) => {
+export const createAccount = async (username, email, password) => {
   try {
-  
-
-    const res = await axiosClient.post("/auth/local/register", {
-      username: username,
-      email: email,
-      password: password,
+    const res = await axiosClient.post("/api/auth/register", {
+      username,
+      email,
+      password,
     });
-
     return res.data;
-  }
-   catch (error) {
-    console.error("Error creating account:", error); // Use console.error
-    throw error; // Re-throw to handle at the call site
+  } catch (error) {
+    console.error("Error creating account:", error);
+    throw error;
   }
 };
-export const getLoginAccount = async (email, password) => {
+
+export const login = async (email, password) => {
   try {
-  
-
-    const res = await axiosClient.post("/auth/local/", {
-      identifier: email,
-      password: password
+    const res = await axiosClient.post("/api/auth/login", {
+      email,
+      password,
     });
-
     return res.data;
-  }
-   catch (error) {
-    console.error("Error creating account:", error); // Use console.error
-    throw error; // Re-throw to handle at the call site
+  } catch (error) {
+    console.error("Error logging in:", error);
+    throw error;
   }
 };
-export const handleAddToCart = async (data)=>{
-  try{
-      const res = await axiosClient.post("/user-carts", data,{
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_BACKEND_TOKEN}`,
-          'Content-Type': 'application/json' 
-        }
-      })
-      return res.data;
-  }
-  catch(error){
+
+export const addToCart = async (data, token) => {
+  try {
+    const res = await axiosClient.post("/api/cart", data, {
+      headers: {
+        'x-auth-token': token,
+      },
+    });
+    return res.data;
+  } catch (error) {
     console.error(error);
   }
-
-}
+};
