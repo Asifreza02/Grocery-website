@@ -11,39 +11,58 @@ import {
 import { getSlider } from '../_utils/GlobalApi'
 
 const Slide = () => {
+  const [sliderList, setSliderList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [sliderList, setSliderList] = useState([]); 
-  const getSliderList = async () =>{
-      try {
-          const res = await getSlider();
-          setSliderList(res);
-        } catch (error) {
-          console.error("Error fetching categories:", error);
-          
-        }
-  };
-    useEffect(() => {
-      getSliderList(); 
-    }, []);
-    return (
-        <Carousel>
-        <CarouselContent>
-          {sliderList.map((slider, index)=>( // Changed from res.data to res
-            <CarouselItem key={index} >
-              <img src={slider.image} alt={slider.name} // Changed from a deeply nested structure to a direct property
-                className=' p-8 w-screen h-[200px] md:h-[400px] object-cover'
-                  />
-              
-            </CarouselItem>
-            
-          ))}
-          
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
-      
-      )
+  const getSliderList = async () => {
+    try {
+      const res = await getSlider();
+      // ✅ Safely extract data (Strapi usually sends res.data)
+      const list = res?.data || [];
+      setSliderList(list);
+    } catch (error) {
+      console.error("Error fetching sliders:", error);
+    } finally {
+      setLoading(false);
     }
-    
-    export default Slide
+  };
+
+  useEffect(() => {
+    getSliderList();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="w-full h-[200px] md:h-[400px] flex items-center justify-center">
+        <p>Loading sliders...</p>
+      </div>
+    );
+  }
+
+  return (
+    <Carousel>
+      <CarouselContent>
+        {sliderList.map((slider, index) => {
+          const imageUrl =
+            process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
+            (slider?.attributes?.image?.data?.attributes?.url ?? "");
+          const name = slider?.attributes?.name ?? `Slide ${index + 1}`;
+
+          return (
+            <CarouselItem key={index}>
+              <img
+                src={imageUrl}
+                alt={name}
+                className="p-8 w-screen h-[200px] md:h-[400px] object-cover"
+              />
+            </CarouselItem>
+          );
+        })}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  );
+};
+
+export default Slide;
