@@ -7,8 +7,12 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Set up a whitelist of allowed origins and configure CORS to use it
-const whitelist = ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:3000']; // Add other origins as needed
+
+const whitelist = ['http://localhost:3000',
+     'http://localhost:3001', 
+     'http://127.0.0.1:3000',
+      'https://grocery-website-ruby.vercel.app'
+     ];
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
