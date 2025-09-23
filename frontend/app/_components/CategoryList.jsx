@@ -29,9 +29,9 @@ const CategoryList = () => {
 
 
   return (
-    <div className="mt-10">
+    <div className="mt-10 mx-10">
       <h2 className="text-black-600 font-bold text-2xl">Shop by Category</h2>
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-5 mt-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 mt-2">
         {categoryList.data.map((category) => (
           <Link href={`/product-category/${category.name}`} key={category._id}>
             <div className="flex flex-col items-center justify-center gap-2 p-3 

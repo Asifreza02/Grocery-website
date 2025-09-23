@@ -32,7 +32,7 @@ const Slide = () => {
 
   if (loading) {
     return (
-      <div className="w-full h-[200px] md:h-[400px] flex items-center justify-center">
+      <div className="w-full h-screen md:h-[6000px] flex items-center justify-center">
         <p>Loading sliders...</p>
       </div>
     );
@@ -48,7 +48,7 @@ const Slide = () => {
               <img
                 src={slider.image}
                 alt={slider.name}
-                className="p-8 w-screen h-[200px] md:h-[400px] object-cover"
+                className="w-full h-[300px] md:h-[500px] flex items-center justify-center object-contain"
               />
             </CarouselItem>
           );
