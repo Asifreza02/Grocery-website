@@ -9,7 +9,7 @@ const Products = () => {
   const getAllProducts = async () => {
     try {
       const res = await getProducts();
-      setProductList(res?.data || res || []); // ✅ handle both Strapi or flat response
+      setProductList(res?.data || res || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -21,13 +21,11 @@ const Products = () => {
 
   return (
     <div className="mt-10">
-      <h2 className="text-green-600 font-bold text-2xl">Our Popular Products</h2>
+      <h2 className="text-black-600 font-bold text-2xl">Our Popular Products</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {productList.map((product, index) => {
-          // ✅ Pick unique key safely
           const id = product?.id || product?._id || index;
 
-          // ✅ Handle Strapi (attributes) vs flat objects
           const name = product?.attributes?.name ?? product?.name ?? "Unnamed";
           const image =
             product?.attributes?.image?.data?.attributes?.url

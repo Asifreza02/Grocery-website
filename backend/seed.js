@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './backend/.env' });
+require('dotenv').config({ path: '.env' });
 const mongoose = require('mongoose');
 
 const Category = require('./models/Category');
@@ -8,75 +8,83 @@ const Slider = require('./models/Slider');
 const MONGODB_URI = process.env.ATLAS_URI;
 
 const categories = [
-  { name: 'Fruits', icon: '/uploads/fruits.png' },
-  { name: 'Vegetables', icon: '/uploads/vegetables.png' },
-  { name: 'Dairy', icon: '/uploads/dairy.png' },
-  { name: 'Bakery', icon: '/uploads/bakery.png' },
+  { name: 'Fruits', icon: './uploads/fruits.png' },
+  { name: 'Vegetables', icon: './uploads/vegetables.png' },
+  { name: 'Dairy', icon: './uploads/dairy.png' },
+  { name: 'Bakery', icon: './uploads/bakery.png' },
 ];
 
 const products = [
   {
     name: 'Apple',
     description: 'Fresh and juicy apples',
-    price: 2.5,
+    mrp: 60,
+    sellingPrice: 55,
     category: 'Fruits',
-    image: '/uploads/apple.png',
+    image: './uploads/apple.png',
   },
   {
     name: 'Banana',
     description: 'Ripe bananas',
-    price: 1.8,
+    mrp: 30,
+    sellingPrice: 25,
     category: 'Fruits',
-    image: '/uploads/banana.png',
+    image: './uploads/banana.png',
   },
   {
     name: 'Carrot',
     description: 'Organic carrots',
-    price: 1.2,
+    mrp: 20,
+    sellingPrice: 18,
     category: 'Vegetables',
-    image: '/uploads/carrot.png',
+    image: './uploads/carrot.png',
   },
   {
     name: 'Broccoli',
     description: 'Fresh broccoli',
-    price: 2.0,
+    mrp: 30,
+    sellingPrice: 28,
     category: 'Vegetables',
-    image: '/uploads/broccoli.png',
+    image: './uploads/broccoli.png',
   },
   {
     name: 'Milk',
     description: 'Fresh cow milk',
-    price: 3.0,
+    mrp: 70,
+    sellingPrice: 65,
     category: 'Dairy',
-    image: '/uploads/milk.png',
+    image: './uploads/milk.png',
   },
   {
     name: 'Cheese',
     description: 'Aged cheddar cheese',
-    price: 5.5,
+    mrp: 50,
+    sellingPrice: 50,
     category: 'Dairy',
-    image: '/uploads/cheese.png',
+    image: './uploads/cheese.png',
   },
   {
     name: 'Bread',
     description: 'Whole wheat bread',
-    price: 2.8,
+    mrp: 30,
+    sellingPrice: 25,
     category: 'Bakery',
-    image: '/uploads/bread.png',
+    image: './uploads/bread.png',
   },
   {
     name: 'Croissant',
     description: 'Buttery croissant',
-    price: 1.5,
+    mrp: 40,
+    sellingPrice: 30,
     category: 'Bakery',
-    image: '/uploads/croissant.png',
+    image: './uploads/croissant.png',
   },
 ];
 
 const sliders = [
-    { image: 'https://source.unsplash.com/random/800x600?fruits' },
-    { image: 'https://source.unsplash.com/random/800x600?vegetables' },
-    { image: 'https://source.unsplash.com/random/800x600?dairy' },
+    { image: './uploads/slider1.png' },
+    { image: './uploads/slider2.png' },
+    { image: './uploads/slider3.png' },
 ];
 
 const seedDB = async () => {

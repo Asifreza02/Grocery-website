@@ -27,11 +27,15 @@ const Header = () => {
   const getCategoryList = async () => {
     try {
       const res = await getCategory();
-      setCategoryList(res.data || []);
+      setCategoryList(res.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
+
+    useEffect(() => {
+      getCategoryList();
+    }, []);
 
   const onLogout = () => {
     sessionStorage.clear();
@@ -42,19 +46,16 @@ const Header = () => {
   useEffect(() => {
     setIsLogin(!!sessionStorage.getItem('jwt'));
     getCategoryList();
-  }, []); // ✅ only run once on mount
+  }, []);
 
   return (
     <div className='flex justify-between p-4 md:px-12 bg-slate-500 shadow-lg'>
-      {/* Left side */}
       <div className='flex gap-6 md:gap-12 items-center'>
         <img
           src="./grocery-store-logo.jpg"
           alt="logo"
           className='w-18 h-10 object-contain'
         />
-
-        {/* Category Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <h2 className='flex items-center gap-2 border rounded-full p-2 px-4 bg-slate-200 cursor-pointer'>
@@ -65,8 +66,8 @@ const Header = () => {
           <DropdownMenuContent>
             <DropdownMenuLabel>Categories</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {categoryList?.map((category, index) => {
-              const name = category?.attributes?.name ?? "Unnamed";
+            {categoryList.map((category, index) => {
+              const name = category.name ?? "Unnamed";
               const iconUrl =
                 process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
                 (category?.attributes?.icon?.data?.attributes?.url ?? "");
@@ -75,11 +76,11 @@ const Header = () => {
                 <Link key={index} href={'/product-category/' + name}>
                   <DropdownMenuItem className="cursor-pointer">
                     <img
-                      src={iconUrl}
-                      alt={name}
+                      src={category.icon ? category.icon : iconUrl}
+                      alt={category.name}
                       className='w-8 h-8 object-contain'
                     />
-                    <h2>{name}</h2>
+                    <h2>{category.name}</h2>
                   </DropdownMenuItem>
                 </Link>
               );
@@ -87,7 +88,6 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Search Bar */}
         <div className='md:flex hidden p-2 gap-1 items-center border border-gray-800 rounded-full'>
           <Search className='h-5 w-5' />
           <input

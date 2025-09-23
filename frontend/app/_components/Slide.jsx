@@ -17,9 +17,8 @@ const Slide = () => {
   const getSliderList = async () => {
     try {
       const res = await getSlider();
-      // ✅ Safely extract data (Strapi usually sends res.data)
-      const list = res?.data || [];
-      setSliderList(list);
+      console.log(res.data);
+      setSliderList(Array.isArray(res) ? res : res.data || []);
     } catch (error) {
       console.error("Error fetching sliders:", error);
     } finally {
@@ -42,17 +41,13 @@ const Slide = () => {
   return (
     <Carousel>
       <CarouselContent>
-        {sliderList.map((slider, index) => {
-          const imageUrl =
-            process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-            (slider?.attributes?.image?.data?.attributes?.url ?? "");
-          const name = slider?.attributes?.name ?? `Slide ${index + 1}`;
-
+        {sliderList.map((slider) => {
+          {`console.log(slider);`}
           return (
-            <CarouselItem key={index}>
+            <CarouselItem key={slider._id}>
               <img
-                src={imageUrl}
-                alt={name}
+                src={slider.image}
+                alt={slider.name}
                 className="p-8 w-screen h-[200px] md:h-[400px] object-cover"
               />
             </CarouselItem>
@@ -66,3 +61,4 @@ const Slide = () => {
 };
 
 export default Slide;
+

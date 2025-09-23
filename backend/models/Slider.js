@@ -8,4 +8,6 @@ const SliderSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Slider', SliderSchema);
+const Slider = mongoose.model('Slider', SliderSchema);
+
+module.exports = Slider;

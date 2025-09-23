@@ -25,7 +25,8 @@ exports.createProduct = async (req, res) => {
   const product = new Product({
     name: req.body.name,
     description: req.body.description,
-    price: req.body.price,
+    mrp: req.body.mrp,
+    sellingPrice: req.body.sellingPrice,
     category: req.body.category,
     image: req.body.image
   });
