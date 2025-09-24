@@ -1,5 +1,5 @@
 'use client'
-import { LayoutGrid, Search, ShoppingBag, UserIcon } from 'lucide-react'
+import { Globe, LayoutGrid, Search, ShoppingBag, UserIcon } from 'lucide-react'
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import { getCategory } from '../_utils/GlobalApi';
@@ -17,12 +17,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-
-
 const Header = () => {
   const [categoryList, setCategoryList] = useState([]);
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
+
 
   const getCategoryList = async () => {
     try {
@@ -33,18 +32,18 @@ const Header = () => {
     }
   };
 
-    useEffect(() => {
-      getCategoryList();
-    }, []);
 
   const onLogout = () => {
-    sessionStorage.clear();
-    toast("Logout successfully");
-    router.push('/');
+    localStorage.removeItem("token");
+    setIsLogin(false);
+    toast.success("Logout successful");
+    router.push('/sign-in');
   };
 
+  
   useEffect(() => {
-    setIsLogin(!!sessionStorage.getItem('jwt'));
+    const token = localStorage.getItem("token");
+    setIsLogin(!!token);
     getCategoryList();
   }, []);
 
@@ -56,6 +55,9 @@ const Header = () => {
           alt="logo"
           className='w-18 h-10 object-contain'
         />
+        <h2 onClick={() => router.push('/')} className='cursor-pointer'>
+          <Globe size={24} />
+        </h2>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <h2 className='flex items-center gap-2 border rounded-full p-2 px-4 bg-slate-200 cursor-pointer'>
@@ -100,11 +102,13 @@ const Header = () => {
 
       {/* Right side */}
       <div className='flex items-center gap-6'>
-        <h2 className='flex items-center'>
-          <ShoppingBag />
-          0
-        </h2>
-
+  <h2
+    className='flex items-center cursor-pointer'
+    onClick={() => router.push('/cart')}
+  >
+    <ShoppingBag />
+    Cart
+  </h2>
         {!isLogin ? (
           <Link href='/sign-in'>
             <Button>Login</Button>

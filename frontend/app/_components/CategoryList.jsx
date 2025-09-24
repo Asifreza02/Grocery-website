@@ -39,7 +39,7 @@ const CategoryList = () => {
               <img
                 src={category.icon}
                 alt={category.name}
-                className="w-20 h-20 object-cover"
+                className="w-28 h-28 object-cover"
               />
               <h2 className="text-green-800 group-hover:text-white">{category.name}</h2>
             </div>
