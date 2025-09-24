@@ -64,7 +64,7 @@ const Products = () => {
       <h2 className="text-black/80 font-bold text-2xl mb-6 text-center md:text-left">
         Our Popular Products:
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6 auto-rows-fr">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
         {productList.map((product, index) => {
           const id = product?._id || product?.id || index;
           const name = product?.attributes?.name ?? product?.name ?? 'Unnamed';
