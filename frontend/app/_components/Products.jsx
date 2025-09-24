@@ -60,9 +60,9 @@ const Products = () => {
   }
 
   return (
-    <div className="mt-10 mx-10">
-      <h2 className="text-black-600 font-bold text-2xl">Our Popular Products</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div className="my-20 md:mx-10">
+      <h2 className="text-black-600 font-bold text-2xl my-8">Our Popular Products :</h2>
+      <div className="grid min-w-80 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5 mt-2 ">
         {productList.map((product, index) => {
           const id = product?._id || product?.id || index
           const name = product?.attributes?.name ?? product?.name ?? 'Unnamed'
@@ -79,7 +79,7 @@ const Products = () => {
             <div
               key={id}
               className="p-2 md:p-6 flex flex-col items-center justify-center gap-3 
-                         border rounded-lg hover:scale-105 hover:shadow-lg transition-all ease-in-out"
+                         border rounded-lg hover:scale-105 hover:shadow-lg transition-all ease-in-out min-w-40"
             >
               <img src={image} alt={name} className="w-full h-[120px] object-contain" />
               <h2 className="font-bold text-lg">{name}</h2>

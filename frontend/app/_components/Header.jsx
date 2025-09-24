@@ -55,8 +55,9 @@ const Header = () => {
           alt="logo"
           className='w-18 h-10 object-contain'
         />
-        <h2 onClick={() => router.push('/')} className='cursor-pointer'>
-          <Globe size={24} />
+        <h2 onClick={() => router.push('/')} className='md:flex hidden p-2 gap-1 items-center  cursor-pointer'>
+          <Globe size={28} />
+          Home
         </h2>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
