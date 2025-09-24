@@ -12,7 +12,7 @@ const whitelist = ['http://localhost:3000',
      'http://localhost:3001', 
      'http://127.0.0.1:3000',
       'https://grocery-website-ruby.vercel.app',
-      'https://grocery-website-u3pf.onrender.com'
+      'https://grocery-website-git-main-md-asif-rezas-projects.vercel.app'
      ];
 const corsOptions = {
     origin: function (origin, callback) {
