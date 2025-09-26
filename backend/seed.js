@@ -21,7 +21,7 @@ const products = [
     mrp: 60,
     sellingPrice: 55,
     category: 'Fruits',
-    image: './uploads/apple.png',
+    image: '/uploads/apple.png',
   },
   {
     name: 'Banana',
@@ -29,7 +29,7 @@ const products = [
     mrp: 30,
     sellingPrice: 25,
     category: 'Fruits',
-    image: './uploads/banana.png',
+    image: '/uploads/banana.png',
   },
   {
     name: 'Carrot',
@@ -37,7 +37,7 @@ const products = [
     mrp: 20,
     sellingPrice: 18,
     category: 'Vegetables',
-    image: './uploads/carrot.png',
+    image: '/uploads/carrot.png',
   },
   {
     name: 'Broccoli',
@@ -45,7 +45,7 @@ const products = [
     mrp: 30,
     sellingPrice: 28,
     category: 'Vegetables',
-    image: './uploads/broccoli.png',
+    image: '/uploads/broccoli.png',
   },
   {
     name: 'Milk',
@@ -53,7 +53,7 @@ const products = [
     mrp: 70,
     sellingPrice: 65,
     category: 'Dairy',
-    image: './uploads/milk.png',
+    image: '/uploads/milk.png',
   },
   {
     name: 'Cheese',
@@ -61,7 +61,7 @@ const products = [
     mrp: 50,
     sellingPrice: 50,
     category: 'Dairy',
-    image: './uploads/cheese.png',
+    image: '/uploads/cheese.png',
   },
   {
     name: 'Bread',
@@ -69,7 +69,7 @@ const products = [
     mrp: 30,
     sellingPrice: 25,
     category: 'Bakery',
-    image: './uploads/bread.png',
+    image: '/uploads/bread.png',
   },
   {
     name: 'Croissant',
@@ -77,7 +77,7 @@ const products = [
     mrp: 40,
     sellingPrice: 30,
     category: 'Bakery',
-    image: './uploads/croissant.png',
+    image: '/uploads/croissant.png',
   },
 ];
 

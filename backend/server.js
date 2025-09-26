@@ -36,7 +36,7 @@ const sliderRoutes = require('./routes/sliderRoutes');
 
 app.use('/api/categories', categoryRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/sliders', sliderRoutes);
 

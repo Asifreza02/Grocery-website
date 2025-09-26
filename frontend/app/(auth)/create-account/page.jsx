@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { registerUser } from '../_services/auth'
+import { registerUser } from '@/app/_utils/GlobalApi'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -30,6 +30,7 @@ const CreateAccount = () => {
 
     try {
       const data = await registerUser(username, email, password);
+      localStorage.setItem('token', data.token);
       toast.success("Account has been created.");
 
       router.push('/');

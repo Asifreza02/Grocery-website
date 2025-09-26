@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { loginUser } from '../_services/auth'
+import { loginUser } from '@/app/_utils/GlobalApi'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -27,7 +27,8 @@ const SignIn = () => {
 
   const onLoginAccount = async () => {
     try {
-      await loginUser(email, password);
+      const data = await loginUser(email, password);
+      localStorage.setItem('token', data.token);
       toast.success("Login successful!")
       router.push('/')
     }

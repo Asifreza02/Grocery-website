@@ -49,9 +49,9 @@ const Header = () => {
 
   return (
     <div className='flex justify-between p-4 md:px-12 bg-slate-500 shadow-lg'>
-      <div className='flex gap-6 md:gap-12 items-center'>
+      <div className='flex gap-2 md:gap-12 items-center'>
         <img
-          src="./grocery-store-logo.jpg"
+         src='/grocery-store-logo.jpg'
           alt="logo"
           className='w-18 h-10 object-contain'
         />
@@ -61,8 +61,8 @@ const Header = () => {
         </h2>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <h2 className='flex items-center gap-2 border rounded-full p-2 px-4 bg-slate-200 cursor-pointer'>
-              <LayoutGrid className='h-5 w-5' />
+            <h2 className='flex items-center gap-2 border rounded-full p-2 md:px-4 bg-slate-200 cursor-pointer'>
+              <LayoutGrid className='h-4 w-4' />
               Category
             </h2>
           </DropdownMenuTrigger>
@@ -91,7 +91,7 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className='md:flex hidden p-2 gap-1 items-center border border-gray-800 rounded-full'>
+        <div className='lg:flex hidden ml-20 p-2 gap-1 items-center border border-gray-800 rounded-full'>
           <Search className='h-5 w-5' />
           <input
             type="text"
@@ -102,7 +102,7 @@ const Header = () => {
       </div>
 
       {/* Right side */}
-      <div className='flex items-center gap-6'>
+      <div className='flex items-center gap-2 md:gap-6'>
   <h2
     className='flex items-center cursor-pointer'
     onClick={() => router.push('/cart')}
