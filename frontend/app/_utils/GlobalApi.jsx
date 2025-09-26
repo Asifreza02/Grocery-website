@@ -50,7 +50,7 @@ export const getProductsByCategory = async (category) => {
 // ===== Auth APIs =====
 export const createAccount = async (username, email, password) => {
   try {
-    const res = await axiosClient.post("/api/auth/register", { username, email, password });
+    const res = await axiosClient.post("/api/register", { username, email, password });
     return res.data;
   } catch (error) {
     console.error("Error creating account:", error.response?.data || error.message);
@@ -60,7 +60,7 @@ export const createAccount = async (username, email, password) => {
 
 export const login = async (email, password) => {
   try {
-    const res = await axiosClient.post("/api/auth/login", { email, password });
+    const res = await axiosClient.post("/api/login", { email, password });
     return res.data;
   } catch (error) {
     console.error("Error logging in:", error.response?.data || error.message);
