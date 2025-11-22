@@ -2,7 +2,6 @@
 import { Globe, LayoutGrid, Search, ShoppingBag, UserIcon } from 'lucide-react'
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
-import { getCategory } from '../_utils/GlobalApi';
 
 import {
   DropdownMenu,
@@ -25,7 +24,8 @@ const Header = () => {
 
   const getCategoryList = async () => {
     try {
-      const res = await getCategory();
+      const response = await fetch('/api/categories');
+      const res = await response.json();
       setCategoryList(res.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -71,15 +71,13 @@ const Header = () => {
             <DropdownMenuSeparator />
             {categoryList.map((category, index) => {
               const name = category.name ?? "Unnamed";
-              const iconUrl =
-                process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-                (category?.attributes?.icon?.data?.attributes?.url ?? "");
+              const iconUrl = category.icon;
 
               return (
                 <Link key={index} href={'/product-category/' + name}>
                   <DropdownMenuItem className="cursor-pointer">
                     <img
-                      src={category.icon ? category.icon : iconUrl}
+                      src={iconUrl}
                       alt={category.name}
                       className='w-8 h-8 object-contain'
                     />

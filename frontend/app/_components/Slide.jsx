@@ -8,16 +8,14 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
-import { getSlider } from '../_utils/GlobalApi'
-
 const Slide = () => {
   const [sliderList, setSliderList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const getSliderList = async () => {
     try {
-      const res = await getSlider();
-      console.log(res.data);
+      const response = await fetch('/api/sliders');
+      const res = await response.json();
       setSliderList(Array.isArray(res) ? res : res.data || []);
     } catch (error) {
       console.error("Error fetching sliders:", error);

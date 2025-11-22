@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { getCategory } from '../_utils/GlobalApi';
 import Link from 'next/link';
 
 const CategoryList = () => {
@@ -9,7 +8,8 @@ const CategoryList = () => {
 
   const getCategoryList = async () => {
     try {
-      const res = await getCategory();
+      const response = await fetch('/api/categories');
+      const res = await response.json();
       setCategoryList(res);
     } catch (error) {
       console.error("Error fetching categories:", error);
