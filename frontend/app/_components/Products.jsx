@@ -60,7 +60,9 @@ const Products = () => {
   }
 
   return (
-    <div className="my-12 px-4 md:px-8">
+    <div className="flex flex-col items-center justify-between gap-3 p-3 md:p-4
+                         border rounded-lg
+                         w-full my-12">
       <h2 className="text-black/80 font-bold text-2xl mb-6 text-center md:text-left">
         Our Popular Products:
       </h2>
@@ -81,7 +83,7 @@ const Products = () => {
               key={id}
               className="flex flex-col items-center justify-between gap-3 p-3 md:p-4
                          border rounded-lg hover:scale-105 hover:shadow-lg transition-all duration-200
-                         w-full min-h-[260px] bg-white"
+                         w-full min-h-[260px] bg-slate-200"
             >
               <div className="w-full flex-1 flex items-center justify-center">
                 <img
@@ -93,7 +95,7 @@ const Products = () => {
               <h2 className="font-bold text-lg text-center truncate w-full">{name}</h2>
 
               <div className="flex gap-2 justify-center items-center">
-                {sellingPrice && <span className="font-bold text-lg">${sellingPrice}</span>}
+                {sellingPrice && <span className="font-bold text-lg">₹{sellingPrice}</span>}
                 <span
                   className={`font-bold text-lg ${
                     sellingPrice ? 'line-through text-gray-500' : ''
@@ -105,11 +107,11 @@ const Products = () => {
 
               <button
                 onClick={() => handleAddToCart(product)}
-                className="w-full flex items-center justify-center gap-2
+                className="w-1/2 flex items-center justify-center gap-2
                            border p-2 rounded-lg bg-green-50 text-green-700
                            hover:text-white hover:bg-green-500 hover:border-green-700 transition duration-200"
               >
-                <Plus size={16} /> Add to Cart
+                Add to Cart
               </button>
             </div>
           );

@@ -8,12 +8,12 @@ const ProductCategory = ({ params }) => {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
+
   const categoryName = React.use(params)?.categoryName;
 
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || 'http://localhost:5000';
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || '';
 
-  
+
   const fetchProductsByCategory = async () => {
     try {
       const res = await getProductsByCategory(categoryName);
@@ -84,10 +84,10 @@ const ProductCategory = ({ params }) => {
 
           // Handle image URLs
           console.log('Product Image Data:', product);
-          const image =   product.image?.data?.attributes?.url
-              ? process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-                product.attributes.image.data.attributes.url
-              : product.image; // fallback image
+          const image = product.image?.data?.attributes?.url
+            ? process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
+            product.attributes.image.data.attributes.url
+            : product.image; // fallback image
 
           return (
             <div
@@ -108,9 +108,8 @@ const ProductCategory = ({ params }) => {
               <div className="flex gap-2 justify-center items-center">
                 {sellingPrice && <span className="font-bold text-lg">${sellingPrice}</span>}
                 <span
-                  className={`font-bold text-lg ${
-                    sellingPrice ? 'line-through text-gray-500' : ''
-                  }`}
+                  className={`font-bold text-lg ${sellingPrice ? 'line-through text-gray-500' : ''
+                    }`}
                 >
                   ${mrp}
                 </span>
@@ -118,11 +117,11 @@ const ProductCategory = ({ params }) => {
 
               <button
                 onClick={() => handleAddToCart(product)}
-                className="w-full flex items-center justify-center gap-2
+                className="w-1/2 flex items-center justify-center gap-2
                            border p-2 rounded-lg bg-green-50 text-green-700
                            hover:text-white hover:bg-green-500 hover:border-green-700 transition duration-200"
               >
-                <Plus size={16} /> Add to Cart
+                Add to Cart
               </button>
             </div>
           );

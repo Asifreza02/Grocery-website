@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_BASE_URL || 'http://localhost:5000',
+  baseURL: '',
   timeout: 10000,
 });
 
@@ -13,8 +13,8 @@ const handleAuthError = (error) => {
   // If token expired or unauthorized
   if (status === 401) {
     localStorage.removeItem("token");
-    throw new Error(message.toLowerCase().includes("expired") 
-      ? "Session expired. Please log in again." 
+    throw new Error(message.toLowerCase().includes("expired")
+      ? "Session expired. Please log in again."
       : "Unauthorized. Please log in.");
   }
 

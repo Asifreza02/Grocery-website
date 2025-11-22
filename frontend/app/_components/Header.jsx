@@ -48,7 +48,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className='flex justify-between p-4 md:px-12 bg-slate-500 shadow-lg'>
+    <div className='flex justify-between p-4 md:px-12 bg-slate-300 shadow-lg mb-8'>
       <div className='flex gap-2 md:gap-12 items-center'>
         <img
          src='/grocery-store-logo.jpg'
