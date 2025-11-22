@@ -7,14 +7,12 @@ import Banners from "./_components/Banners";
 import CategoryList from "./_components/CategoryList";
 import Footer from "./_components/Footer";
 import Products from "./_components/Products";
-import Slide from "./_components/Slide";
 
 export default function Home() {
   return (
     <div className="px-4 md:px-14">
       <HeroSection />
       <FeaturesSection />
-      <Slide />
       <CategoryList />
       <Products />
       <TestimonialsSection />
