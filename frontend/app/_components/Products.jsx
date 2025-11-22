@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { getProducts, addToCart } from '../_utils/GlobalApi';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -10,8 +9,9 @@ const Products = () => {
 
   const getAllProducts = async () => {
     try {
-      const res = await getProducts();
-      setProductList(res?.data || res || []);
+      const response = await fetch('/api/products');
+      const res = await response.json();
+      setProductList(res?.data || []);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast.error('Failed to load products');
@@ -39,7 +39,14 @@ const Products = () => {
       }
 
       const cartData = { productId, quantity: 1 };
-      await addToCart(cartData, token);
+      await fetch('/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(cartData),
+      });
       toast.success(`${product.name} added to cart!`);
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -68,11 +75,7 @@ const Products = () => {
         {productList.map((product, index) => {
           const id = product?._id || product?.id || index;
           const name = product?.attributes?.name ?? product?.name ?? 'Unnamed';
-          const image =
-            product?.attributes?.image?.data?.attributes?.url
-              ? process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-                product.attributes.image.data.attributes.url
-              : product?.image;
+          const image = product?.image;
           const mrp = product?.attributes?.mrp ?? product?.mrp ?? 0;
           const sellingPrice = product?.attributes?.sellingPrice ?? product?.sellingPrice ?? null;
 
