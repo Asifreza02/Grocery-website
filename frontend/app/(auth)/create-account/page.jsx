@@ -32,8 +32,7 @@ const CreateAccount = () => {
       const data = await registerUser(username, email, password);
       localStorage.setItem('token', data.token);
       toast.success("Account has been created.");
-
-      router.push('/');
+      window.location.href = '/';
     } catch (error) {
       // Show backend message if available
       toast.error(error.message || "Error creating account");

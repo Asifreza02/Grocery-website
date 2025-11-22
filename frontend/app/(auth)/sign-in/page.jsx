@@ -16,21 +16,21 @@ const SignIn = () => {
   const router = useRouter()
 
 
-    useEffect (()=>{
-      const token = localStorage.getItem('token');
-      if (token) {
-        console.log("Token found:", token);
-        toast('Already signed in')
-        router.push('/')
-      }
-    },[])
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      console.log("Token found:", token);
+      toast('Already signed in')
+      router.push('/')
+    }
+  }, [])
 
   const onLoginAccount = async () => {
     try {
       const data = await loginUser(email, password);
       localStorage.setItem('token', data.token);
       toast.success("Login successful!")
-      router.push('/')
+      window.location.href = '/';
     }
     catch (err) {
       toast.error("Invalid email or password");
