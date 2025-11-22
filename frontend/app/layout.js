@@ -1,32 +1,23 @@
-
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
 import { Toaster } from "@/components/ui/sonner";
 
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfit = Outfit({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-outfit",
 });
 
 export const metadata = {
   title: "Grocery App",
-  description: "Created by Asif",
+  description: "Fresh groceries delivered to your doorstep",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header/>
+      <body className={`${outfit.variable} font-sans antialiased`}>
+        <Header />
         {children}
         <Toaster />
       </body>

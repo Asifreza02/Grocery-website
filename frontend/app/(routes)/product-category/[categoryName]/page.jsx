@@ -1,18 +1,15 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { getProductsByCategory, addToCart } from '@/app/_utils/GlobalApi';
-import { Plus } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 const ProductCategory = ({ params }) => {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   const categoryName = React.use(params)?.categoryName;
-
-  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_BASE_URL || '';
-
 
   const fetchProductsByCategory = async () => {
     try {
@@ -57,7 +54,7 @@ const ProductCategory = ({ params }) => {
   if (loading) {
     return (
       <div className="w-full h-[200px] flex items-center justify-center">
-        <p>Loading products...</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -71,59 +68,71 @@ const ProductCategory = ({ params }) => {
   }
 
   return (
-    <div className="my-12 px-4 md:px-8">
-      <h2 className="text-black-600 font-bold text-2xl mb-6 text-center md:text-left">
-        Category: {categoryName}
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-fr">
+    <div className="my-12 px-4 md:px-14">
+      <motion.h2
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-3xl font-bold mb-8 text-center md:text-left text-gradient"
+      >
+        {categoryName}
+      </motion.h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {productList.map((product, index) => {
           const id = product._id || product.id || index;
           const name = product.name || 'Unnamed';
           const mrp = product.mrp ?? 0;
           const sellingPrice = product.sellingPrice ?? null;
-
-          // Handle image URLs
-          console.log('Product Image Data:', product);
-          const image = product.image?.data?.attributes?.url
-            ? process.env.NEXT_PUBLIC_BACKEND_BASE_URL +
-            product.attributes.image.data.attributes.url
-            : product.image; // fallback image
+          const image = product.image;
 
           return (
-            <div
+            <motion.div
               key={id}
-              className="flex flex-col items-center justify-between gap-3 p-3 md:p-4
-                         border rounded-lg hover:scale-105 hover:shadow-lg transition-all duration-200
-                         w-full min-h-[260px] bg-white"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              whileHover={{ y: -10 }}
+              className="group relative flex flex-col justify-between p-4 rounded-2xl glassmorphism hover:shadow-2xl transition-all duration-300"
             >
-              <div className="w-full flex-1 flex items-center justify-center">
-                <img
+              <div className="relative w-full h-48 mb-4 overflow-hidden rounded-xl bg-white/50 flex items-center justify-center">
+                <motion.img
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.3 }}
                   src={image}
                   alt={name}
-                  className="max-h-[140px] object-contain"
+                  className="h-full object-contain p-4"
                 />
-              </div>
-              <h2 className="font-bold text-lg text-center truncate w-full">{name}</h2>
 
-              <div className="flex gap-2 justify-center items-center">
-                {sellingPrice && <span className="font-bold text-lg">${sellingPrice}</span>}
-                <span
-                  className={`font-bold text-lg ${sellingPrice ? 'line-through text-gray-500' : ''
-                    }`}
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  whileHover={{ scale: 1.1 }}
+                  className="absolute bottom-4 right-4 bg-emerald-500 text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0"
+                  onClick={() => handleAddToCart(product)}
                 >
-                  ${mrp}
-                </span>
+                  <ShoppingCart size={20} />
+                </motion.button>
               </div>
 
-              <button
-                onClick={() => handleAddToCart(product)}
-                className="w-1/2 flex items-center justify-center gap-2
-                           border p-2 rounded-lg bg-green-50 text-green-700
-                           hover:text-white hover:bg-green-500 hover:border-green-700 transition duration-200"
-              >
-                Add to Cart
-              </button>
-            </div>
+              <div className="space-y-2">
+                <h2 className="font-bold text-lg truncate text-foreground">{name}</h2>
+
+                <div className="flex items-baseline gap-2">
+                  {sellingPrice && (
+                    <span className="font-bold text-xl text-emerald-600">₹{sellingPrice}</span>
+                  )}
+                  <span className={`text-sm ${sellingPrice ? 'line-through text-muted-foreground' : 'font-bold text-xl text-emerald-600'}`}>
+                    ₹{mrp}
+                  </span>
+                </div>
+                {/* Visible Add to Cart button */}
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="mt-2 w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-colors duration-200"
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </motion.div>
           );
         })}
       </div>

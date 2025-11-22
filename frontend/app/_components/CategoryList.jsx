@@ -1,6 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
 
 const CategoryList = () => {
   const [categoryList, setCategoryList] = useState([]);
@@ -24,7 +26,11 @@ const CategoryList = () => {
   }, []);
 
   if (loading) {
-    return <p className="mt-10 text-gray-500 text-center">Loading categories...</p>;
+    return (
+      <div className="w-full h-[200px] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+      </div>
+    );
   }
 
   if (!categoryList?.data?.length) {
@@ -32,27 +38,55 @@ const CategoryList = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-between gap-3 p-3 md:p-4
-                         border rounded-lg
-                         w-full mt-8 ">
-      <h2 className="text-black/80 font-bold text-2xl mb-6 text-center md:text-left">
-        Shop by Category:
-      </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-8">
-        {categoryList.data.map((category) => (
+    <div className="w-full py-16">
+      <div className="flex items-center justify-between mb-8">
+        <motion.h2
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="text-3xl font-bold text-gradient"
+        >
+          Shop by Category
+        </motion.h2>
+        <Link href="/categories" className="text-emerald-600 hover:text-emerald-700 flex items-center gap-1 font-medium transition-colors">
+          View All <ChevronRight className="w-4 h-4" />
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {categoryList.data.map((category, index) => (
           <Link href={`/product-category/${category.name}`} key={category._id}>
-            <div className="flex flex-col items-center justify-center gap-2 p-3 bg-slate-200
-              border rounded-lg cursor-pointer group hover:bg-green-100 hover:scale-105 hover:shadow-lg transition-all duration-200
-              min-w-[120px] min-h-[150px]">
-              <img
-                src={category.icon}
-                alt={category.name}
-                className="w-24 h-24 md:w-28 md:h-28 object-contain min-w-[80px] min-h-[80px]"
-              />
-              <h2 className="text-black/80 text-center group-hover:text-green-700 font-medium truncate">
-                {category.name}
-              </h2>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
+              whileHover={{ y: -8, transition: { duration: 0.2 } }}
+              className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-2xl glassmorphism hover:shadow-2xl transition-all duration-300 overflow-hidden"
+            >
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <div className="w-20 h-20 md:w-24 md:h-24 flex items-center justify-center bg-white/50 dark:bg-black/20 rounded-full p-3 group-hover:scale-110 transition-transform duration-300">
+                  <img
+                    src={category.icon}
+                    alt={category.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <h3 className="text-center font-semibold text-foreground group-hover:text-emerald-600 transition-colors duration-200 text-sm md:text-base">
+                  {category.name}
+                </h3>
+              </div>
+
+              {/* Animated arrow on hover */}
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileHover={{ opacity: 1, x: 0 }}
+                className="absolute right-3 top-3 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ChevronRight className="w-4 h-4 text-emerald-600" />
+              </motion.div>
+            </motion.div>
           </Link>
         ))}
       </div>
