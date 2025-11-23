@@ -8,29 +8,29 @@ const axiosClient = axios.create({
 const getCategory = () => axiosClient.get('/categories');
 const getSliders = () => axiosClient.get('/sliders');
 const getProducts = () => axiosClient.get('/products');
-const getProductsByCategory = (category) => axiosClient.get('/products?category='+category);
-const registerUser = (username,email,password) => axiosClient.post('/auth/register', {
+const getProductsByCategory = (category) => axiosClient.get('/products?category=' + encodeURIComponent(category));
+const registerUser = (username, email, password) => axiosClient.post('/auth/register', {
     username,
     email,
     password
 });
-const loginUser = (email,password) => axiosClient.post('/auth/login', {
+const loginUser = (email, password) => axiosClient.post('/auth/login', {
     email,
     password
 });
-const addToCart = (data,jwt) => axiosClient.post('/cart', data, {
+const addToCart = (data, jwt) => axiosClient.post('/cart', data, {
     headers: {
-        Authorization: 'Bearer '+jwt
+        Authorization: 'Bearer ' + jwt
     }
 });
-const getCart = (email,jwt) => axiosClient.get('/cart?userEmail='+email, {
+const getCart = (email, jwt) => axiosClient.get('/cart?userEmail=' + email, {
     headers: {
-        Authorization: 'Bearer '+jwt
+        Authorization: 'Bearer ' + jwt
     }
 });
-const removeFromCart = (id,jwt) => axiosClient.delete('/cart/'+id, {
+const removeFromCart = (id, jwt) => axiosClient.delete('/cart/' + id, {
     headers: {
-        Authorization: 'Bearer '+jwt
+        Authorization: 'Bearer ' + jwt
     }
 })
 

@@ -4,6 +4,7 @@ import { Plus, ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import ShinyText from './ShinyText';
 
 const Products = () => {
   const [productList, setProductList] = useState([]);
@@ -70,13 +71,10 @@ const Products = () => {
 
   return (
     <div className="w-full my-12 px-4 md:px-0">
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold mb-8 text-center md:text-left text-gradient"
-      >
-        Our Popular Products
-      </motion.h2>
+      <ShinyText
+        text="Our Popular Products"
+        className="text-3xl font-bold mb-8 text-center md:text-left"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {productList.map((product, index) => {

@@ -1,27 +1,43 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { getProductsByCategory, addToCart } from '@/app/_utils/GlobalApi';
+import { addToCart } from '@/app/_utils/GlobalApi';
 import { ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import ShinyText from '@/app/_components/ShinyText';
 
 const ProductCategory = ({ params }) => {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categoryName, setCategoryName] = useState('');
 
-  const categoryName = React.use(params)?.categoryName;
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        // Unwrap params
+        const unwrappedParams = await params;
+        const category = unwrappedParams.categoryName;
+        setCategoryName(category);
 
-  const fetchProductsByCategory = async () => {
-    try {
-      const res = await getProductsByCategory(categoryName);
-      setProductList(res?.data || res || []);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      toast.error('Failed to load products');
-    } finally {
-      setLoading(false);
-    }
-  };
+        console.log('Fetching products for category:', category);
+        const response = await fetch('/api/products?category=' + encodeURIComponent(category));
+        const res = await response.json();
+        console.log('API Response:', res);
+        console.log('Products data:', res?.data);
+        const products = res?.data || [];
+        console.log('Setting product list:', products);
+        setProductList(products);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        toast.error('Failed to load products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [params]);
 
   // Add product to cart
   const handleAddToCart = async (product) => {
@@ -47,10 +63,6 @@ const ProductCategory = ({ params }) => {
     }
   };
 
-  useEffect(() => {
-    fetchProductsByCategory();
-  }, [categoryName]);
-
   if (loading) {
     return (
       <div className="w-full h-[200px] flex items-center justify-center">
@@ -69,13 +81,10 @@ const ProductCategory = ({ params }) => {
 
   return (
     <div className="my-12 px-4 md:px-14">
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold mb-8 text-center md:text-left text-gradient"
-      >
-        {categoryName}
-      </motion.h2>
+      <ShinyText
+        text={categoryName}
+        className="text-3xl font-bold mb-8 text-center md:text-left"
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {productList.map((product, index) => {
