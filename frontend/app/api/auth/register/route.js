@@ -6,6 +6,15 @@ import User from '@/models/User';
 
 export async function POST(req) {
   try {
+    if (!process.env.ATLAS_URI) {
+      console.error("ATLAS_URI is not defined");
+      return NextResponse.json({ message: 'Server configuration error' }, { status: 500 });
+    }
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not defined");
+      return NextResponse.json({ message: 'Server configuration error' }, { status: 500 });
+    }
+
     await dbConnect();
     const { username, email, password } = await req.json();
 
@@ -42,7 +51,7 @@ export async function POST(req) {
       user: { id: user._id, username: user.username, email: user.email }
     }, { status: 201 });
   } catch (err) {
-    console.error(err.message);
-    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+    console.error("Registration Error:", err);
+    return NextResponse.json({ message: err.message || 'Server error' }, { status: 500 });
   }
 }
