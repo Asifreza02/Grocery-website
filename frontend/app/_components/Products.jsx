@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Plus, ShoppingCart } from 'lucide-react';
+import { Plus, ShoppingCart, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -102,14 +102,18 @@ const Products = () => {
                   className="h-full object-contain p-4"
                 />
 
-                <motion.button
-                  initial={{ opacity: 0, y: 20 }}
-                  whileHover={{ scale: 1.1 }}
-                  className="absolute bottom-4 right-4 bg-emerald-500 text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0"
-                  onClick={() => handleAddToCart(product)}
-                >
-                  <ShoppingCart size={20} />
-                </motion.button>
+                {/* Overlay Buttons */}
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
+                  <motion.button
+                    initial={{ scale: 0 }}
+                    whileHover={{ scale: 1.1 }}
+                    animate={{ scale: 1 }}
+                    className="bg-white text-emerald-600 p-3 rounded-full shadow-lg hover:bg-emerald-50 transition-colors"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    <ShoppingCart size={20} />
+                  </motion.button>
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -123,13 +127,13 @@ const Products = () => {
                     ₹{mrp}
                   </span>
                 </div>
-                {/* Visible Add to Cart button */}
-                <button
+
+                <Button
                   onClick={() => handleAddToCart(product)}
-                  className="mt-2 w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-colors duration-200"
+                  className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-all"
                 >
                   Add to Cart
-                </button>
+                </Button>
               </div>
             </motion.div>
           );

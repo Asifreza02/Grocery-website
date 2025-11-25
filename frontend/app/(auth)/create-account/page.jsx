@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { registerUser } from '@/app/_utils/GlobalApi'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
@@ -19,24 +18,35 @@ const CreateAccount = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      router.push('/');
+      router.push('/')
     }
   }, [])
 
-  const onCreateAccount = async () => {
-    if (!username || !email || !password) {
-      toast.error("All fields are required");
-      return;
-    }
-
+  const onCreateAccount = async (e) => {
+    if (e) e.preventDefault();
     setLoading(true);
     try {
-      const data = await registerUser(username, email, password);
-      localStorage.setItem('token', data.token);
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, email, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
       toast.success("Account created successfully!");
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       router.push('/');
     } catch (error) {
-      toast.error(error.message || "Error creating account");
+      console.error("Registration error:", error);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -98,7 +108,7 @@ const CreateAccount = () => {
             </div>
 
             <Button
-              onClick={onCreateAccount}
+              onClick={(e) => onCreateAccount(e)}
               disabled={!username || !email || !password || loading}
               className="h-12 text-lg font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
             >

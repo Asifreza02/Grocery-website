@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import SmartCarousel from '@/components/ui/SmartCarousel';
+import { motion } from 'framer-motion';
 
 export default function HeroSection() {
     const [sliders, setSliders] = useState([]);
@@ -24,11 +25,18 @@ export default function HeroSection() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-[400px]">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
-            </div>
+            <div className="w-full h-[400px] md:h-[500px] bg-gray-100 dark:bg-gray-800 animate-pulse rounded-2xl mx-auto mt-4" />
         );
     }
 
-    return <SmartCarousel sliders={sliders} />;
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mt-4"
+        >
+            <SmartCarousel sliders={sliders} />
+        </motion.div>
+    );
 }

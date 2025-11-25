@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getCartItems, updateCartItemQuantity, removeFromCart } from '../_utils/GlobalApi';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -26,7 +25,18 @@ const Cart = () => {
 
   const fetchCart = async (authToken) => {
     try {
-      const data = await getCartItems(authToken);
+      const response = await fetch('/api/cart', {
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch cart');
+      }
+
+      const data = await response.json();
       setCartItems(data);
     } catch (err) {
       handleAuthError(err);
@@ -37,9 +47,9 @@ const Cart = () => {
 
 
   const handleAuthError = (err) => {
-    if (err.message.includes("Session expired") || err.message.includes("Unauthorized")) {
+    if (err.message.includes("Session expired") || err.message.includes("Unauthorized") || err.message.includes("jwt expired")) {
       localStorage.removeItem("token");
-      toast.error(err.message);
+      toast.error("Session expired. Please log in again.");
       router.push('/sign-in');
       return;
     }
@@ -53,7 +63,19 @@ const Cart = () => {
     if (newQuantity < 1) return;
 
     try {
-      await updateCartItemQuantity(item._id, newQuantity, token);
+      const response = await fetch(`/api/cart/${item._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ quantity: newQuantity })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update quantity');
+      }
+
       setCartItems(prev =>
         prev.map(i => i._id === item._id ? { ...i, quantity: newQuantity } : i)
       );
@@ -65,7 +87,17 @@ const Cart = () => {
   // Remove item
   const removeItem = async (itemId) => {
     try {
-      await removeFromCart(itemId, token);
+      const response = await fetch(`/api/cart/${itemId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to remove item');
+      }
+
       setCartItems(prev => prev.filter(i => i._id !== itemId));
       toast.success("Item removed from cart");
     } catch (err) {
@@ -103,9 +135,9 @@ const Cart = () => {
         </div>
       ))}
       <div className="cart-total flex flex-col mt-4 items-end text-xl font-bold">Total: ₹{totalPrice}
-      <Button onClick={() => router.push('/checkout')} className="mt-4 w-40 bg-green-600 text-white px-6 py-2 rounded">Proceed to Checkout</Button>
+        <Button onClick={() => router.push('/checkout')} className="mt-4 w-40 bg-green-600 text-white px-6 py-2 rounded">Proceed to Checkout</Button>
       </div>
-      
+
     </div>
   );
 };

@@ -39,7 +39,7 @@ const CategoryList = () => {
 
   return (
     <div className="w-full py-16">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-8 px-4 md:px-0">
         <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -52,7 +52,7 @@ const CategoryList = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 px-4 md:px-0">
         {categoryList.data.map((category, index) => (
           <Link href={`/product-category/${category.name}`} key={category._id}>
             <motion.div
@@ -60,7 +60,7 @@ const CategoryList = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
-              className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-2xl glassmorphism hover:shadow-2xl transition-all duration-300 overflow-hidden"
+              className="group relative flex flex-col items-center justify-center gap-3 p-6 rounded-2xl glassmorphism hover:shadow-2xl transition-all duration-300 overflow-hidden h-full"
             >
               {/* Gradient overlay on hover */}
               <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { addToCart } from '@/app/_utils/GlobalApi';
 import { ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -55,11 +54,25 @@ const ProductCategory = ({ params }) => {
       }
 
       const cartData = { productId, quantity: 1 };
-      await addToCart(cartData, token);
+
+      const response = await fetch('/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(cartData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add to cart');
+      }
+
       toast.success(`${product.name} added to cart!`);
     } catch (error) {
       console.error('Error adding to cart:', error);
-      toast.error('Failed to add to cart. Please try again.');
+      toast.error(error.message || 'Failed to add to cart. Please try again.');
     }
   };
 

@@ -4,7 +4,7 @@ import React from 'react';
 
 const AuroraBackground = ({ children, className = '' }) => {
     return (
-        <div className={`relative w-full min-h-screen bg-zinc-50 dark:bg-zinc-900 text-slate-950 transition-bg overflow-hidden ${className}`}>
+        <div className={`relative w-full min-h-screen bg-zinc-50 dark:bg-zinc-900 text-slate-950 transition-bg ${className}`}>
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div
                     className={`

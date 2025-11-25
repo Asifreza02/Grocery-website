@@ -1,10 +1,8 @@
-
 "use client"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { loginUser } from '@/app/_utils/GlobalApi'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
@@ -19,25 +17,35 @@ const SignIn = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      router.push('/')
+      router.push('/');
     }
   }, [])
 
-  const onLoginAccount = async () => {
-    if (!email || !password) {
-      toast.error("Please enter both email and password");
-      return;
-    }
-
+  const onLoginAccount = async (e) => {
+    if (e) e.preventDefault();
     setLoading(true);
     try {
-      const data = await loginUser(email, password);
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      toast.success("Login successful!");
       localStorage.setItem('token', data.token);
-      toast.success("Login successful!")
+      localStorage.setItem('user', JSON.stringify(data.user));
       router.push('/');
-    }
-    catch (err) {
-      toast.error(err.message || "Invalid email or password");
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -89,7 +97,7 @@ const SignIn = () => {
             </div>
 
             <Button
-              onClick={() => onLoginAccount()}
+              onClick={(e) => onLoginAccount(e)}
               disabled={(!password || !email || loading)}
               className="h-12 text-lg font-medium bg-emerald-600 hover:bg-emerald-700 text-white transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
             >
