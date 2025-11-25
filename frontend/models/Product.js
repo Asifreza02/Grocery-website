@@ -10,6 +10,11 @@ const productSchema = new mongoose.Schema({
     sellingPrice: { type: Number, required: true },
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     image: { type: String },
+    weight: { type: String },
+    brand: { type: String },
+    rating: { type: Number, default: 0 },
+    reviewsCount: { type: Number, default: 0 },
+    isBestSeller: { type: Boolean, default: false },
 }, {
     timestamps: true,
 });

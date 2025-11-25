@@ -83,11 +83,6 @@ const Header = () => {
             </div>
 
             <div className="hidden md:flex items-center gap-6">
-              <Link href="/" className='flex gap-1 items-center cursor-pointer hover:text-emerald-600 transition-colors font-medium'>
-                <Globe size={18} />
-                Home
-              </Link>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className='flex items-center gap-2 cursor-pointer hover:text-emerald-600 transition-colors font-medium select-none'>

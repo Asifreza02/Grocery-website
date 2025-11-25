@@ -36,7 +36,12 @@ export async function POST(req) {
       mrp: body.mrp,
       sellingPrice: body.sellingPrice,
       category: body.category,
-      image: body.image
+      image: body.image,
+      weight: body.weight,
+      brand: body.brand,
+      rating: body.rating,
+      reviewsCount: body.reviewsCount,
+      isBestSeller: body.isBestSeller
     });
 
     const newProduct = await product.save();

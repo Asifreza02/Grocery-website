@@ -4,6 +4,7 @@ import { ShoppingCart } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import ShinyText from '@/app/_components/ShinyText';
+import ProductItem from '@/app/_components/ProductItem';
 
 const ProductCategory = ({ params }) => {
   const [productList, setProductList] = useState([]);
@@ -99,64 +100,10 @@ const ProductCategory = ({ params }) => {
         className="text-3xl font-bold mb-8 text-center md:text-left"
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {productList.map((product, index) => {
-          const id = product._id || product.id || index;
-          const name = product.name || 'Unnamed';
-          const mrp = product.mrp ?? 0;
-          const sellingPrice = product.sellingPrice ?? null;
-          const image = product.image;
-
-          return (
-            <motion.div
-              key={id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              whileHover={{ y: -10 }}
-              className="group relative flex flex-col justify-between p-4 rounded-2xl glassmorphism hover:shadow-2xl transition-all duration-300"
-            >
-              <div className="relative w-full h-48 mb-4 overflow-hidden rounded-xl bg-white/50 flex items-center justify-center">
-                <motion.img
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ duration: 0.3 }}
-                  src={image}
-                  alt={name}
-                  className="h-full object-contain p-4"
-                />
-
-                <motion.button
-                  initial={{ opacity: 0, y: 20 }}
-                  whileHover={{ scale: 1.1 }}
-                  className="absolute bottom-4 right-4 bg-emerald-500 text-white p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0"
-                  onClick={() => handleAddToCart(product)}
-                >
-                  <ShoppingCart size={20} />
-                </motion.button>
-              </div>
-
-              <div className="space-y-2">
-                <h2 className="font-bold text-lg truncate text-foreground">{name}</h2>
-
-                <div className="flex items-baseline gap-2">
-                  {sellingPrice && (
-                    <span className="font-bold text-xl text-emerald-600">₹{sellingPrice}</span>
-                  )}
-                  <span className={`text-sm ${sellingPrice ? 'line-through text-muted-foreground' : 'font-bold text-xl text-emerald-600'}`}>
-                    ₹{mrp}
-                  </span>
-                </div>
-                {/* Visible Add to Cart button */}
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  className="mt-2 w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-emerald-600 text-white hover:bg-emerald-700 transition-colors duration-200"
-                >
-                  Add to Cart
-                </button>
-              </div>
-            </motion.div>
-          );
-        })}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+        {productList.map((product, index) => (
+          <ProductItem key={product._id || index} product={product} index={index} />
+        ))}
       </div>
     </div>
   );
