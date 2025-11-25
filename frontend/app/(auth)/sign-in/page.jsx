@@ -42,6 +42,7 @@ const SignIn = () => {
       toast.success("Login successful!");
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      window.dispatchEvent(new Event('auth-change'));
       router.push('/');
     } catch (error) {
       console.error("Login error:", error);

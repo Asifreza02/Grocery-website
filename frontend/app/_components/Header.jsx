@@ -35,20 +35,31 @@ const Header = () => {
   const onLogout = () => {
     localStorage.removeItem("token");
     setIsLogin(false);
+    window.dispatchEvent(new Event('auth-change'));
     toast.success("Logout successful");
     router.push('/sign-in');
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLogin(!!token);
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      setIsLogin(!!token);
+    };
+
+    checkAuth();
     getCategoryList();
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('auth-change', checkAuth);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('auth-change', checkAuth);
+    };
   }, []);
 
   return (

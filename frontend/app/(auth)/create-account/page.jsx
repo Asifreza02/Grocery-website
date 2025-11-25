@@ -43,6 +43,7 @@ const CreateAccount = () => {
       toast.success("Account created successfully!");
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
+      window.dispatchEvent(new Event('auth-change'));
       router.push('/');
     } catch (error) {
       console.error("Registration error:", error);
