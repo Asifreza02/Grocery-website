@@ -41,6 +41,7 @@ const ProductItem = ({ product, index = 0 }) => {
                 body: JSON.stringify(cartData),
             });
             toast.success(`${name} added to cart!`);
+            window.dispatchEvent(new Event('cart-update'));
         } catch (error) {
             console.error('Error adding to cart:', error);
             toast.error('Failed to add to cart. Please try again.');

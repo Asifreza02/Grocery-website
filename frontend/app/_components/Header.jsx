@@ -1,6 +1,6 @@
 'use client'
 import { Globe, LayoutGrid, Search, ShoppingBag, UserIcon, Menu, X } from 'lucide-react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -21,6 +21,9 @@ const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   const getCategoryList = async () => {
     try {
@@ -32,18 +35,45 @@ const Header = () => {
     }
   };
 
+  const getCartCount = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const response = await fetch('/api/cart', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.ok) {
+        const cartItems = await response.json();
+        setCartCount(cartItems.length);
+      }
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
+    }
+  };
+
   const onLogout = () => {
     localStorage.removeItem("token");
     setIsLogin(false);
+    setCartCount(0);
     window.dispatchEvent(new Event('auth-change'));
     toast.success("Logout successful");
     router.push('/sign-in');
+  };
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      router.push(`/search/${encodeURIComponent(searchQuery)}`);
+      setShowMobileSearch(false);
+    }
   };
 
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("token");
       setIsLogin(!!token);
+      if (token) getCartCount();
     };
 
     checkAuth();
@@ -53,12 +83,20 @@ const Header = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
+    // Listen for custom events to update cart
+    const handleCartUpdate = () => {
+      getCartCount();
+    };
+
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('auth-change', checkAuth);
+    // You might need to dispatch this event from other components when cart changes
+    window.addEventListener('cart-update', handleCartUpdate);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('auth-change', checkAuth);
+      window.removeEventListener('cart-update', handleCartUpdate);
     };
   }, []);
 
@@ -115,18 +153,31 @@ const Header = () => {
               type="text"
               placeholder='Search for products...'
               className='w-full pl-10 pr-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-emerald-500/50 transition-all outline-none'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleSearch}
             />
           </div>
 
           {/* Right Actions */}
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-2 md:gap-4'>
+            {/* Mobile Search Toggle */}
+            <button
+              className="lg:hidden p-2 text-gray-600 hover:text-emerald-600"
+              onClick={() => setShowMobileSearch(!showMobileSearch)}
+            >
+              <Search size={22} />
+            </button>
+
             <div
               className='flex items-center gap-2 cursor-pointer hover:text-emerald-600 transition-colors relative group'
               onClick={() => router.push('/cart')}
             >
               <div className="relative">
                 <ShoppingBag size={22} />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">0</span>
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
+                  {cartCount}
+                </span>
               </div>
               <span className="hidden md:block font-medium">Cart</span>
             </div>
@@ -166,6 +217,33 @@ const Header = () => {
             </button>
           </div>
         </div>
+
+        {/* Mobile Search Input */}
+        <AnimatePresence>
+          {showMobileSearch && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="lg:hidden mt-2 overflow-hidden"
+            >
+              <div className="relative">
+                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+                  <Search className='h-4 w-4' />
+                </div>
+                <input
+                  type="text"
+                  placeholder='Search...'
+                  className='w-full pl-9 pr-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-emerald-500/50 transition-all outline-none text-sm'
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch}
+                  autoFocus
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div >
 
       {/* Mobile Menu */}

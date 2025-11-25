@@ -8,6 +8,7 @@ export async function GET(req) {
     await dbConnect();
     const { searchParams } = new URL(req.url);
     const categoryName = searchParams.get('category');
+    const search = searchParams.get('search');
 
     let products;
     if (categoryName) {
@@ -17,6 +18,14 @@ export async function GET(req) {
       } else {
         products = [];
       }
+    } else if (search) {
+      const searchRegex = new RegExp(search, 'i');
+      products = await Product.find({
+        $or: [
+          { name: { $regex: searchRegex } },
+          { description: { $regex: searchRegex } }
+        ]
+      }).populate('category');
     } else {
       products = await Product.find().populate('category');
     }
