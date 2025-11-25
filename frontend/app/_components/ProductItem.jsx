@@ -17,6 +17,7 @@ const ProductItem = ({ product, index = 0 }) => {
     const reviews = product?.reviewsCount || 120;
 
     const [isFavorite, setIsFavorite] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
         checkIfFavorite();
@@ -84,6 +85,8 @@ const ProductItem = ({ product, index = 0 }) => {
                 return;
             }
 
+            setIsAdding(true); // Start animation immediately
+
             const cartData = { productId, quantity: 1 };
             await fetch('/api/cart', {
                 method: 'POST',
@@ -98,6 +101,8 @@ const ProductItem = ({ product, index = 0 }) => {
         } catch (error) {
             console.error('Error adding to cart:', error);
             toast.error('Failed to add to cart. Please try again.');
+        } finally {
+            setTimeout(() => setIsAdding(false), 500); // Reset after a short delay
         }
     };
 
@@ -169,9 +174,20 @@ const ProductItem = ({ product, index = 0 }) => {
 
                     <Button
                         onClick={handleAddToCart}
-                        className="rounded-full w-8 h-8 p-0 bg-emerald-100 text-emerald-600 hover:bg-emerald-600 hover:text-white shadow-none hover:shadow-lg transition-all duration-300"
+                        disabled={isAdding}
+                        className={`rounded-full w-8 h-8 p-0 shadow-none hover:shadow-lg transition-all duration-300 ${isAdding ? 'bg-emerald-600 text-white scale-110' : 'bg-emerald-100 text-emerald-600 hover:bg-emerald-600 hover:text-white'}`}
                     >
-                        <Plus size={18} />
+                        {isAdding ? (
+                            <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            >
+                                <Plus size={18} className="animate-spin" />
+                            </motion.div>
+                        ) : (
+                            <Plus size={18} />
+                        )}
                     </Button>
                 </div>
             </div>
