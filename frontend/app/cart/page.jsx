@@ -134,6 +134,50 @@ const Cart = () => {
   const shipping = subtotal > 500 ? 0 : 50; // Free shipping over 500
   const total = subtotal + shipping;
 
+  const handleCheckout = async () => {
+    if (!userAddress) {
+      toast.error("Please add a delivery address");
+      router.push('/profile');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const orderItems = cartItems.map(item => ({
+        product: item.product._id,
+        quantity: item.quantity,
+        price: item.product.sellingPrice
+      }));
+
+      const response = await fetch('/api/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          items: orderItems,
+          totalAmount: total,
+          address: userAddress
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to place order');
+      }
+
+      // Dispatch cart update event to clear badge
+      window.dispatchEvent(new Event('cart-update'));
+      router.push('/order-confirmation');
+
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to place order. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -264,11 +308,11 @@ const Cart = () => {
             </div>
 
             <Button
-              onClick={() => router.push('/checkout')}
+              onClick={handleCheckout}
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-6 text-lg rounded-xl shadow-emerald-200 shadow-lg"
-              disabled={!userAddress}
+              disabled={!userAddress || loading}
             >
-              Checkout <ArrowRight className="ml-2" />
+              Place Order <ArrowRight className="ml-2" />
             </Button>
           </motion.div>
         </div>
