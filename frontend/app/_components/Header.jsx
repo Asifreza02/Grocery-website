@@ -152,10 +152,14 @@ const Header = () => {
                 <DropdownMenuContent align="end" className="w-48 glassmorphism border-none">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className='cursor-pointer'>Profile</DropdownMenuItem>
-                  <DropdownMenuItem className='cursor-pointer'>Orders</DropdownMenuItem>
-                  <DropdownMenuItem onClick={onLogout} className="text-red-500 cursor-pointer focus:text-red-600 focus:bg-red-50">
-                    Logout
+                  <DropdownMenuItem onClick={() => router.push('/profile')} className="cursor-pointer gap-2">
+                    <UserIcon size={16} /> Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/my-order')} className="cursor-pointer gap-2">
+                    <ShoppingBag size={16} /> My Orders
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={onLogout} className="cursor-pointer gap-2 text-red-500 hover:text-red-600">
+                    <span className="font-medium">Logout</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -167,10 +171,10 @@ const Header = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div >
 
       {/* Mobile Menu */}
-      <AnimatePresence>
+      < AnimatePresence >
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
@@ -197,8 +201,8 @@ const Header = () => {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
-    </motion.header>
+      </AnimatePresence >
+    </motion.header >
   )
 }
 
