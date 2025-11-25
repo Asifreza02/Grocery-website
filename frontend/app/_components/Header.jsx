@@ -1,5 +1,5 @@
 'use client'
-import { Globe, LayoutGrid, Search, ShoppingBag, UserIcon, Menu, X } from 'lucide-react'
+import { Globe, LayoutGrid, Search, ShoppingBag, UserIcon, Menu, X, Heart } from 'lucide-react'
 import { useState, useEffect, useContext } from 'react';
 import { Button } from "@/components/ui/button"
 import {
@@ -203,6 +203,9 @@ const Header = () => {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/my-order')} className="cursor-pointer gap-2">
                     <ShoppingBag size={16} /> My Orders
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/my-favorites')} className="cursor-pointer gap-2">
+                    <Heart size={16} /> My Favorites
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={onLogout} className="cursor-pointer gap-2 text-red-500 hover:text-red-600">
                     <span className="font-medium">Logout</span>

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Eye, Star, Heart, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,59 @@ const ProductItem = ({ product, index = 0 }) => {
     const weight = product?.weight || '1 kg';
     const rating = product?.rating || 4.5;
     const reviews = product?.reviewsCount || 120;
+
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    useEffect(() => {
+        checkIfFavorite();
+    }, [product]);
+
+    const checkIfFavorite = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        try {
+            const response = await fetch('/api/favorites', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const favorites = await response.json();
+                const isFav = favorites.some(fav => fav._id === (product._id || product.id));
+                setIsFavorite(isFav);
+            }
+        } catch (error) {
+            console.error("Error checking favorites:", error);
+        }
+    };
+
+    const toggleFavorite = async (e) => {
+        e.stopPropagation();
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast.error('Please login to manage favorites');
+            return;
+        }
+        try {
+            const method = isFavorite ? 'DELETE' : 'POST';
+            const response = await fetch('/api/favorites', {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ productId: product._id || product.id })
+            });
+
+            if (response.ok) {
+                setIsFavorite(!isFavorite);
+                toast.success(isFavorite ? 'Removed from favorites' : 'Added to favorites');
+            } else {
+                toast.error('Failed to update favorites');
+            }
+        } catch (error) {
+            console.error("Error toggling favorite:", error);
+            toast.error('Something went wrong');
+        }
+    };
 
     const handleAddToCart = async (e) => {
         e.stopPropagation(); // Prevent parent clicks if any
@@ -67,8 +120,11 @@ const ProductItem = ({ product, index = 0 }) => {
 
                 {/* Overlay Actions */}
                 <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-x-4 group-hover:translate-x-0">
-                    <button className="p-2 bg-white rounded-full shadow-md hover:bg-emerald-50 text-gray-600 hover:text-emerald-600 transition-colors">
-                        <Heart size={16} />
+                    <button
+                        onClick={toggleFavorite}
+                        className={`p-2 rounded-full shadow-md transition-colors ${isFavorite ? 'bg-red-50 text-red-500' : 'bg-white text-gray-600 hover:bg-emerald-50 hover:text-emerald-600'}`}
+                    >
+                        <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
                     </button>
                     <button className="p-2 bg-white rounded-full shadow-md hover:bg-emerald-50 text-gray-600 hover:text-emerald-600 transition-colors">
                         <Eye size={16} />
